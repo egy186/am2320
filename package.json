@@ -1,0 +1,38 @@
+{
+  "name": "am2320",
+  "description": "AM2320 in Node.js",
+  "version": "0.1.0",
+  "author": "egy186",
+  "bugs": {
+    "url": "https://github.com/egy186/am2320/issues"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "crc": "^3.4.0",
+    "i2c-bus": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-egy186": "github:egy186/eslint-config-egy186#v0.1.1"
+  },
+  "files": [
+    "address.js",
+    "event.js",
+    "get-data.js",
+    "index.js"
+  ],
+  "homepage": "https://github.com/egy186/am2320#readme",
+  "keywords": [
+    "am2320",
+    "i2c"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egy186/am2320.git"
+  },
+  "scripts": {
+    "lint": "eslint **/*.js"
+  }
+}
