@@ -6,7 +6,7 @@ const busNumber = 1;
 
 const am2320 = new Am2320({
   busNumber,
-  interval: 1000 // ms
+  interval: 1000 // Ms
 });
 
 am2320.on('data', data => {

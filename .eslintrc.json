@@ -1,3 +1,6 @@
 {
-  "extends": "egy186"
+  "extends": [
+    "@egy186/eslint-config",
+    "@egy186/eslint-config/node"
+  ]
 }

@@ -11,11 +11,15 @@ const getData = (bus, callback) => {
     cb => bus.scan(cb),
     (devices, cb) => setTimeout(cb, 5),
     cb => {
-      const buffer = new Buffer([addrs.READ_FUNC, addrs.H_HUMID, addrs.READ_COUNT]);
+      const buffer = Buffer.from([
+        addrs.READ_FUNC,
+        addrs.H_HUMID,
+        addrs.READ_COUNT
+      ]);
       bus.i2cWrite(addrs.ADDR, buffer.length, buffer, cb);
     },
     (bytesWritten, buffer, cb) => setTimeout(cb, 5),
-    cb => bus.i2cRead(addrs.ADDR, length, new Buffer(length).fill(0), cb),
+    cb => bus.i2cRead(addrs.ADDR, length, Buffer.alloc(length), cb),
     (bytesRead, buffer, cb) => {
       if ((buffer[length - 1] << 8) + buffer[length - 2] !== crc.crc16modbus(buffer.slice(0, length - 2))) {
         cb(new Error('CRC Error'));

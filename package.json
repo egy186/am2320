@@ -7,16 +7,19 @@
     "url": "https://github.com/egy186/am2320/issues"
   },
   "dependencies": {
-    "async": "^1.5.2",
-    "crc": "^3.4.0",
-    "i2c-bus": "^1.0.1"
+    "async": "^2.6.0",
+    "crc": "^3.5.0",
+    "i2c-bus": "^2.0.0"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-egy186": "github:egy186/eslint-config-egy186#v0.1.1"
+    "@egy186/eslint-config": "^0.31.0",
+    "eslint": "^4.18.0"
+  },
+  "engines": {
+    "node": ">=8.9.4"
   },
   "files": [
-    "address.js",
+    "addresses.js",
     "event.js",
     "get-data.js",
     "index.js"
@@ -33,6 +36,6 @@
     "url": "git+https://github.com/egy186/am2320.git"
   },
   "scripts": {
-    "lint": "eslint **/*.js"
+    "lint": "eslint ."
   }
 }
