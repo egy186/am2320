@@ -1,7 +1,7 @@
 {
   "name": "am2320",
   "description": "AM2320 in Node.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "egy186",
   "bugs": {
     "url": "https://github.com/egy186/am2320/issues"
