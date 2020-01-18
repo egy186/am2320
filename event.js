@@ -4,25 +4,37 @@ const EventEmitter = require('events');
 const getData = require('./get-data');
 const i2c = require('i2c-bus');
 
-const Sensor = class extends EventEmitter {
-  constructor (options) {
+const stringify = obj => `${JSON.stringify(obj)}\n`;
+
+const Am2320Emitter = class extends EventEmitter {
+  constructor (busNumber) {
     super();
-    const bus = i2c.openSync(options.busNumber);
-    const interval = Number.isFinite(options.interval) ? options.interval : 1000;
-    const intervalID = setInterval(() => {
-      getData(bus, (err, data) => {
-        if (err) {
-          this.emit('error', err);
-        } else {
-          this.emit('data', `${JSON.stringify(data)}\n`);
-        }
-      });
-    }, interval);
-    process.on('SIGINT', () => {
-      clearInterval(intervalID);
-      bus.closeSync();
-    });
+    this.busPromise = i2c.openPromisified(busNumber);
+  }
+
+  async end () {
+    const bus = await this.busPromise;
+    await bus.close();
+  }
+
+  async read () {
+    const bus = await this.busPromise;
+    try {
+      const data = await getData(bus);
+      this.emit('result', stringify(data));
+    } catch (err) {
+      this.emit('error', stringify({
+        message: err.message,
+        name: err.name,
+        stack: err.stack
+      }));
+    }
   }
 };
 
-module.exports = Sensor;
+const event = busNumber => {
+  const emitter = new Am2320Emitter(busNumber);
+  return emitter;
+};
+
+module.exports = event;

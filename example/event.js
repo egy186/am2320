@@ -1,17 +1,24 @@
 'use strict';
 
-const Am2320 = require('../event');
+const am2320 = require('../index');
 
-const busNumber = 1;
+const BUS_NUMBER = 1;
+const interval = 1000;
 
-const am2320 = new Am2320({
-  busNumber,
-  interval: 1000 // Ms
+const emitter = am2320.event(BUS_NUMBER);
+
+emitter.on('result', data => {
+  console.log(JSON.parse(data));
+});
+emitter.on('error', err => {
+  console.error(JSON.parse(err));
 });
 
-am2320.on('data', data => {
-  console.log(data);
-});
-am2320.on('error', err => {
-  console.error(err);
-});
+const intervalID = setInterval(() => {
+  emitter.read();
+}, interval);
+
+setTimeout(async () => {
+  clearInterval(intervalID);
+  await emitter.end();
+}, interval * 5);

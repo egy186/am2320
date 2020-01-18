@@ -2,9 +2,9 @@
 
 const am2320 = require('../index');
 
-const busNumber = 1;
+const BUS_NUMBER = 1;
 
-am2320(busNumber).then(data => {
+am2320.read(BUS_NUMBER).then(data => {
   console.log(data);
 }, err => {
   console.error(err);

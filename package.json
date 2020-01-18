@@ -7,9 +7,8 @@
     "url": "https://github.com/egy186/am2320/issues"
   },
   "dependencies": {
-    "async": "^3.1.0",
     "crc": "^3.8.0",
-    "i2c-bus": "^4.0.10"
+    "i2c-bus": "^5.1.0"
   },
   "devDependencies": {
     "@egy186/eslint-config": "^0.43.0",
@@ -22,7 +21,8 @@
     "addresses.js",
     "event.js",
     "get-data.js",
-    "index.js"
+    "index.js",
+    "read.js"
   ],
   "homepage": "https://github.com/egy186/am2320#readme",
   "keywords": [

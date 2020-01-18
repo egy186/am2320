@@ -1,38 +1,35 @@
 'use strict';
 
 const addrs = require('./addresses');
-const async = require('async');
 const crc = require('crc');
 
-const length = 2 + addrs.READ_COUNT + 2;
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
-const getData = (bus, callback) => {
-  async.waterfall([
-    cb => bus.scan(cb),
-    (devices, cb) => setTimeout(cb, 5),
-    cb => {
-      const buffer = Buffer.from([
-        addrs.READ_FUNC,
-        addrs.H_HUMID,
-        addrs.READ_COUNT
-      ]);
-      bus.i2cWrite(addrs.ADDR, buffer.length, buffer, cb);
-    },
-    (bytesWritten, buffer, cb) => setTimeout(cb, 5),
-    cb => bus.i2cRead(addrs.ADDR, length, Buffer.alloc(length), cb),
-    (bytesRead, buffer, cb) => {
-      if ((buffer[length - 1] << 8) + buffer[length - 2] !== crc.crc16modbus(buffer.slice(0, length - 2))) {
-        cb(new Error('CRC Error'));
-        return;
-      }
-      const data = {
-        datetime: new Date(),
-        humidity: ((buffer[addrs.H_HUMID + 2] << 8) + buffer[addrs.L_HUMID + 2]) / 10,
-        temperature: ((buffer[addrs.H_TEMP + 2] << 8) + buffer[addrs.L_TEMP + 2]) / 10
-      };
-      cb(null, data);
-    }
-  ], callback);
+const HEAD_COUNT = 0x02;
+const READ_COUNT = 0x04;
+const CRC_COUNT = 0x02;
+const readLength = HEAD_COUNT + READ_COUNT + CRC_COUNT;
+
+const getData = async bus => {
+  await bus.scan(addrs.ADDR);
+  await sleep(5);
+  const writeBuffer = Buffer.from([
+    addrs.READ_FUNC,
+    addrs.H_HUMID,
+    READ_COUNT
+  ]);
+  await bus.i2cWrite(addrs.ADDR, writeBuffer.length, writeBuffer);
+  await sleep(5);
+  const { buffer } = await bus.i2cRead(addrs.ADDR, readLength, Buffer.alloc(readLength));
+  if (buffer.readUInt16LE(readLength - CRC_COUNT) !== crc.crc16modbus(buffer.slice(0, readLength - CRC_COUNT))) {
+    throw new Error('CRC Error');
+  }
+  const data = {
+    datetime: new Date(),
+    humidity: buffer.readUInt16BE(HEAD_COUNT + addrs.H_HUMID) / 10,
+    temperature: buffer.readUInt16BE(HEAD_COUNT + addrs.H_TEMP) / 10
+  };
+  return data;
 };
 
 module.exports = getData;
