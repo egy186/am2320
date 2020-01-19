@@ -8,14 +8,14 @@ const interval = 1000;
 const emitter = am2320.event(BUS_NUMBER);
 
 emitter.on('result', data => {
-  console.log(JSON.parse(data));
+  console.log(data);
 });
 emitter.on('error', err => {
-  console.error(JSON.parse(err));
+  console.error(err);
 });
 
-const intervalID = setInterval(() => {
-  emitter.read();
+const intervalID = setInterval(async () => {
+  await emitter.read();
 }, interval);
 
 setTimeout(async () => {

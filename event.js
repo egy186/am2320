@@ -4,8 +4,6 @@ const EventEmitter = require('events');
 const getData = require('./get-data');
 const i2c = require('i2c-bus');
 
-const stringify = obj => `${JSON.stringify(obj)}\n`;
-
 const Am2320Emitter = class extends EventEmitter {
   constructor (busNumber) {
     super();
@@ -21,13 +19,9 @@ const Am2320Emitter = class extends EventEmitter {
     const bus = await this.busPromise;
     try {
       const data = await getData(bus);
-      this.emit('result', stringify(data));
+      this.emit('result', data);
     } catch (err) {
-      this.emit('error', stringify({
-        message: err.message,
-        name: err.name,
-        stack: err.stack
-      }));
+      this.emit('error', err);
     }
   }
 };
