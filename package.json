@@ -22,6 +22,7 @@
     "event.js",
     "get-data.js",
     "index.js",
+    "index.d.ts",
     "read.js"
   ],
   "homepage": "https://github.com/egy186/am2320#readme",
