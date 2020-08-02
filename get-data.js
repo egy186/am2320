@@ -3,7 +3,9 @@
 const addrs = require('./addresses');
 const crc = require('crc');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = msec => new Promise(resolve => {
+  setTimeout(resolve, msec);
+});
 
 const HEAD_COUNT = 0x02;
 const READ_COUNT = 0x04;
